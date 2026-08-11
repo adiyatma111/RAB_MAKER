@@ -275,7 +275,7 @@
                     <select id="selectMaterial" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white w-full sm:w-80 focus:border-sky-500 focus:outline-none cursor-pointer truncate">
                     </select>
                     <button onclick="addItemFromSelect()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-sky-500/20 active:scale-95 shrink-0">
-                        + Tambahkan
+                        + Auto Pilih
                     </button>
                 </div>
             </div>
@@ -287,64 +287,7 @@
                 <div id="rekapPagesContainer" class="w-full flex flex-col items-center">
                 </div>
 
-                <div class="print-page rounded-2xl shadow-xl relative flex flex-col justify-between border border-slate-200">
-                    <div>
-                        <div class="flex justify-between items-start border-b-2 border-black pb-1.5 mb-2">
-                            <div class="flex items-center gap-3">
-                                <svg class="h-9 w-auto" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="300" height="300" fill="#FFF200"/>
-                                    <path d="M50 120 C 80 100, 120 140, 150 120 C 180 100, 220 140, 250 120 L 250 140 C 220 160, 180 120, 150 140 C 120 160, 80 120, 50 140 Z" fill="#00AEEF"/>
-                                    <path d="M50 160 C 80 140, 120 180, 150 160 C 180 140, 220 180, 250 160 L 250 180 C 220 200, 180 160, 150 180 C 120 200, 80 160, 50 180 Z" fill="#00AEEF"/>
-                                    <path d="M50 200 C 80 180, 120 220, 150 200 C 180 180, 220 220, 250 200 L 250 220 C 220 240, 180 200, 150 220 C 120 240, 80 200, 50 220 Z" fill="#00AEEF"/>
-                                    <polygon points="170,50 120,160 170,140 130,260 210,120 160,135" fill="#ED1C24"/>
-                                    <text x="150" y="380" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="90" fill="#00AEEF" text-anchor="middle">PLN</text>
-                                </svg>
-                                <div class="text-[9.5px] leading-tight font-bold text-black">
-                                    PT. PLN (PERSERO)<br>
-                                    UNIT INDUK DISTRIBUSI JAWA TIMUR<br>
-                                    UP3 MALANG
-                                </div>
-                            </div>
-                            <div class="text-right text-black">
-                                <h2 class="font-bold text-xs underline tracking-wide">RINCIAN PEKERJAAN PERMOHONAN PB/PD</h2>
-                                <p class="text-[9px]" id="outNamaRincian">A.N. -</p>
-                            </div>
-                        </div>
-
-                        <table class="pln-table mb-2">
-                            <thead>
-                                <tr>
-                                    <th style="width: 5%;">NO</th>
-                                    <th style="width: 10%;">KODE</th>
-                                    <th style="width: 41%;">URAIAN PEKERJAAN / SPESIFIKASI</th>
-                                    <th style="width: 6%;">SAT</th>
-                                    <th style="width: 6%;">VOL</th>
-                                    <th style="width: 16%;">HARGA SATUAN (Rp)</th>
-                                    <th style="width: 16%;">JUMLAH HARGA (Rp)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="rincianTableBody">
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="flex justify-between items-end text-center text-[10px] pt-1 text-black">
-                        <div class="w-48 relative">
-                            <div id="outTTDAsmanImgContainer" class="h-16 flex items-center justify-center">
-                                <img id="outTTDAsmanImg2" src="" class="max-h-16 hidden object-contain">
-                            </div>
-                            <p class="font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
-                            <p id="outAsman2" class="font-bold underline">BAYU KRISTANTO</p>
-                        </div>
-                        <div class="w-48 relative">
-                            <p id="outTanggal2" class="mb-0.5">Malang, -</p>
-                            <div id="outTTDTLImgContainer" class="h-16 flex items-center justify-center">
-                                <img id="outTTDTLImg2" src="" class="max-h-16 hidden object-contain">
-                            </div>
-                            <p class="font-semibold">TEAM LEADER PERENCANAAN</p>
-                            <p id="outTL2" class="font-bold underline">ARDY NURFIANTO</p>
-                        </div>
-                    </div>
+                <div id="rincianPagesContainer" class="w-full flex flex-col items-center">
                 </div>
 
             </div>
@@ -515,7 +458,7 @@
                 renderAllTables();
             } else {
                 updateSingleRowCalculations(index);
-                renderRincianTable();
+                renderRincianPages();
                 calculateTotal();
             }
         }
@@ -532,17 +475,18 @@
 
         function renderAllTables() {
             renderRekapPages();
-            renderRincianTable();
+            renderRincianPages();
             calculateTotal();
         }
 
+        /* ------------------- 1. RENDER DINAMIS REKAP RAB ------------------- */
         function renderRekapPages() {
             const container = document.getElementById('rekapPagesContainer');
             if (!container) return;
             container.innerHTML = '';
 
             if (activeItems.length === 0) {
-                container.innerHTML = `<div class="print-page rounded-2xl shadow-xl relative mb-6 border border-slate-200 flex flex-col justify-between">${createPageHTML(0, [], true)}</div>`;
+                container.innerHTML = `<div class="print-page rounded-2xl shadow-xl relative mb-6 border border-slate-200 flex flex-col justify-between">${createRekapPageHTML(0, [], true)}</div>`;
                 return;
             }
 
@@ -559,14 +503,14 @@
 
                 const pageDiv = document.createElement('div');
                 pageDiv.className = "print-page rounded-2xl shadow-xl relative mb-6 border border-slate-200 flex flex-col justify-between";
-                pageDiv.innerHTML = createPageHTML(startIndex, pageItems, isLastPage);
+                pageDiv.innerHTML = createRekapPageHTML(startIndex, pageItems, isLastPage);
                 container.appendChild(pageDiv);
 
                 startIndex += pageItems.length;
             }
         }
 
-        function createPageHTML(startIndex, pageItems, isLastPage) {
+        function createRekapPageHTML(startIndex, pageItems, isLastPage) {
             const nama = document.getElementById('inNama').value || "-";
             const lokasi = document.getElementById('inLokasi').value || "-";
             const ulp = document.getElementById('inULP').value || "MALANG KOTA";
@@ -745,6 +689,170 @@
             `;
         }
 
+        /* ------------------- 2. RENDER DINAMIS RINCIAN PEKERJAAN (MULTI-HALAMAN) ------------------- */
+        function renderRincianPages() {
+            const container = document.getElementById('rincianPagesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Susun struktur baris berdasar Kategori (termasuk Baris Sub-Header Kategori)
+            let formattedRows = [];
+            const kategoriList = ['SUTM', 'SKUTM', 'GTT', 'SUTR'];
+            let rowNo = 1;
+
+            kategoriList.forEach(kat => {
+                const itemsInKat = activeItems.filter(i => i.kategori === kat);
+                if (itemsInKat.length > 0) {
+                    formattedRows.push({ isHeader: true, title: `PEKERJAAN ${kat}` });
+                    itemsInKat.forEach(item => {
+                        formattedRows.push({
+                            isHeader: false,
+                            no: rowNo++,
+                            item: item,
+                            origIdx: activeItems.indexOf(item)
+                        });
+                    });
+                }
+            });
+
+            if (formattedRows.length === 0) {
+                container.innerHTML = `<div class="print-page rounded-2xl shadow-xl relative mb-6 border border-slate-200 flex flex-col justify-between">${createRincianPageHTML([], true)}</div>`;
+                return;
+            }
+
+            const normalLimit = 28;
+            const lastLimit = 22;
+
+            let remainingRows = [...formattedRows];
+
+            while (remainingRows.length > 0) {
+                let currentLimit = (remainingRows.length <= lastLimit) ? lastLimit : normalLimit;
+                let pageRows = remainingRows.splice(0, currentLimit);
+                let isLastPage = (remainingRows.length === 0);
+
+                const pageDiv = document.createElement('div');
+                pageDiv.className = "print-page rounded-2xl shadow-xl relative mb-6 border border-slate-200 flex flex-col justify-between";
+                pageDiv.innerHTML = createRincianPageHTML(pageRows, isLastPage);
+                container.appendChild(pageDiv);
+            }
+        }
+
+        function createRincianPageHTML(pageRows, isLastPage) {
+            const nama = document.getElementById('inNama').value || "-";
+            const tgl = "Malang, " + (document.getElementById('inTanggal').value || "");
+            const asman = document.getElementById('inAsman').value || "";
+            const tl = document.getElementById('inTL').value || "";
+
+            let tbodyHTML = '';
+            if (pageRows.length === 0) {
+                tbodyHTML = `<tr><td colspan="7" class="text-center italic py-4 text-slate-400 font-medium bg-slate-50">Belum ada rincian pekerjaan.</td></tr>`;
+            } else {
+                pageRows.forEach(row => {
+                    if (row.isHeader) {
+                        tbodyHTML += `<tr class="bg-slate-100 font-bold"><td colspan="7" class="px-2 py-1 text-left uppercase tracking-wider text-[10px] text-slate-800">${row.title}</td></tr>`;
+                    } else {
+                        const item = row.item;
+                        const idx = row.origIdx;
+                        const hargaSatuan = item.harga || 0;
+                        const totalRow = (item.vol || 0) * hargaSatuan;
+
+                        if (isPrintMode) {
+                            tbodyHTML += `
+                                <tr>
+                                    <td class="text-center">${row.no}</td>
+                                    <td class="text-center font-mono">${item.kode || '-'}</td>
+                                    <td class="text-left">${item.uraian || '-'}</td>
+                                    <td class="text-center">${item.sat || '-'}</td>
+                                    <td class="text-center font-bold">${item.vol}</td>
+                                    <td class="text-right">${formatAngka(hargaSatuan)}</td>
+                                    <td class="text-right font-bold">${formatRupiah(totalRow)}</td>
+                                </tr>
+                            `;
+                        } else {
+                            tbodyHTML += `
+                                <tr>
+                                    <td class="text-center">${row.no}</td>
+                                    <td><input type="text" value="${item.kode || ''}" placeholder="Kode" oninput="updateItemData(${idx}, 'kode', this.value)" class="text-center font-mono"></td>
+                                    <td><input type="text" value="${item.uraian || ''}" placeholder="Uraian Spesifikasi" oninput="updateItemData(${idx}, 'uraian', this.value)"></td>
+                                    <td><input type="text" value="${item.sat || ''}" placeholder="Sat" oninput="updateItemData(${idx}, 'sat', this.value)" class="text-center"></td>
+                                    <td><input type="number" inputmode="numeric" pattern="[0-9]*" value="${item.vol}" oninput="updateItemData(${idx}, 'vol', parseFloat(this.value)||0)" class="text-center font-bold"></td>
+                                    <td><input type="number" inputmode="numeric" pattern="[0-9]*" value="${hargaSatuan}" placeholder="0" oninput="updateItemData(${idx}, 'harga', parseFloat(this.value)||0)" class="text-right"></td>
+                                    <td class="text-right font-bold">${formatRupiah(totalRow)}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+            }
+
+            let signatureHTML = '';
+            if (isLastPage) {
+                const asmanImg = ttdAsmanData ? `<img src="${ttdAsmanData}" class="max-h-16 object-contain">` : '';
+                const tlImg = ttdTLData ? `<img src="${ttdTLData}" class="max-h-16 object-contain">` : '';
+
+                signatureHTML = `
+                    <div class="flex justify-between items-end text-center text-[10px] pt-1 text-black">
+                        <div class="w-48 relative">
+                            <div class="h-16 flex items-center justify-center">${asmanImg}</div>
+                            <p class="font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
+                            <p class="font-bold underline">${asman}</p>
+                        </div>
+                        <div class="w-48 relative">
+                            <p class="mb-0.5">${tgl}</p>
+                            <div class="h-16 flex items-center justify-center">${tlImg}</div>
+                            <p class="font-semibold">TEAM LEADER PERENCANAAN</p>
+                            <p class="font-bold underline">${tl}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="flex-grow flex flex-col justify-start">
+                    <div class="flex justify-between items-start border-b-2 border-black pb-1.5 mb-2">
+                        <div class="flex items-center gap-3">
+                            <svg class="h-9 w-auto" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="300" height="300" fill="#FFF200"/>
+                                <path d="M50 120 C 80 100, 120 140, 150 120 C 180 100, 220 140, 250 120 L 250 140 C 220 160, 180 120, 150 140 C 120 160, 80 120, 50 140 Z" fill="#00AEEF"/>
+                                <path d="M50 160 C 80 140, 120 180, 150 160 C 180 140, 220 180, 250 160 L 250 180 C 220 200, 180 160, 150 180 C 120 200, 80 160, 50 180 Z" fill="#00AEEF"/>
+                                <path d="M50 200 C 80 180, 120 220, 150 200 C 180 180, 220 220, 250 200 L 250 220 C 220 240, 180 200, 150 220 C 120 240, 80 200, 50 220 Z" fill="#00AEEF"/>
+                                <polygon points="170,50 120,160 170,140 130,260 210,120 160,135" fill="#ED1C24"/>
+                                <text x="150" y="380" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="90" fill="#00AEEF" text-anchor="middle">PLN</text>
+                            </svg>
+                            <div class="text-[9.5px] leading-tight font-bold text-black">
+                                PT. PLN (PERSERO)<br>
+                                UNIT INDUK DISTRIBUSI JAWA TIMUR<br>
+                                UP3 MALANG
+                            </div>
+                        </div>
+                        <div class="text-right text-black">
+                            <h2 class="font-bold text-xs underline tracking-wide">RINCIAN PEKERJAAN PERMOHONAN PB/PD</h2>
+                            <p class="text-[9px]">A.N. ${nama}</p>
+                        </div>
+                    </div>
+
+                    <table class="pln-table mb-2">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">NO</th>
+                                <th style="width: 10%;">KODE</th>
+                                <th style="width: 41%;">URAIAN PEKERJAAN / SPESIFIKASI</th>
+                                <th style="width: 6%;">SAT</th>
+                                <th style="width: 6%;">VOL</th>
+                                <th style="width: 16%;">HARGA SATUAN (Rp)</th>
+                                <th style="width: 16%;">JUMLAH HARGA (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tbodyHTML}
+                        </tbody>
+                    </table>
+                </div>
+
+                ${signatureHTML}
+            `;
+        }
+
         function getSubtotalPerKategori() {
             let res = { SUTM: 0, SKUTM: 0, GTT: 0, SUTR: 0 };
             activeItems.forEach(item => {
@@ -754,59 +862,6 @@
                 }
             });
             return res;
-        }
-
-        function renderRincianTable() {
-            const tbody = document.getElementById('rincianTableBody');
-            tbody.innerHTML = '';
-
-            if (activeItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center italic py-4 text-slate-400 font-medium bg-slate-50">Belum ada rincian pekerjaan.</td></tr>`;
-                return;
-            }
-
-            const kategoriList = ['SUTM', 'SKUTM', 'GTT', 'SUTR'];
-            let rowNo = 1;
-
-            kategoriList.forEach(kat => {
-                const itemsInKat = activeItems.filter(i => i.kategori === kat);
-                if (itemsInKat.length > 0) {
-                    const headerTr = document.createElement('tr');
-                    headerTr.className = "bg-slate-100 font-bold";
-                    headerTr.innerHTML = `<td colspan="7" class="px-2 py-1 text-left uppercase tracking-wider text-[10px] text-slate-800">PEKERJAAN ${kat}</td>`;
-                    tbody.appendChild(headerTr);
-
-                    itemsInKat.forEach(item => {
-                        const originalIndex = activeItems.indexOf(item);
-                        const hargaSatuan = item.harga || 0;
-                        const totalRow = (item.vol || 0) * hargaSatuan;
-
-                        const tr = document.createElement('tr');
-                        if (isPrintMode) {
-                            tr.innerHTML = `
-                                <td class="text-center">${rowNo++}</td>
-                                <td class="text-center font-mono">${item.kode || '-'}</td>
-                                <td class="text-left">${item.uraian || '-'}</td>
-                                <td class="text-center">${item.sat || '-'}</td>
-                                <td class="text-center font-bold">${item.vol}</td>
-                                <td class="text-right">${formatAngka(hargaSatuan)}</td>
-                                <td class="text-right font-bold">${formatRupiah(totalRow)}</td>
-                            `;
-                        } else {
-                            tr.innerHTML = `
-                                <td class="text-center">${rowNo++}</td>
-                                <td><input type="text" value="${item.kode || ''}" placeholder="Kode" oninput="updateItemData(${originalIndex}, 'kode', this.value)" class="text-center font-mono"></td>
-                                <td><input type="text" value="${item.uraian || ''}" placeholder="Uraian Spesifikasi" oninput="updateItemData(${originalIndex}, 'uraian', this.value)"></td>
-                                <td><input type="text" value="${item.sat || ''}" placeholder="Sat" oninput="updateItemData(${originalIndex}, 'sat', this.value)" class="text-center"></td>
-                                <td><input type="number" inputmode="numeric" pattern="[0-9]*" value="${item.vol}" oninput="updateItemData(${originalIndex}, 'vol', parseFloat(this.value)||0)" class="text-center font-bold"></td>
-                                <td><input type="number" inputmode="numeric" pattern="[0-9]*" value="${hargaSatuan}" placeholder="0" oninput="updateItemData(${originalIndex}, 'harga', parseFloat(this.value)||0)" class="text-right"></td>
-                                <td class="text-right font-bold">${formatRupiah(totalRow)}</td>
-                            `;
-                        }
-                        tbody.appendChild(tr);
-                    });
-                }
-            });
         }
 
         function deleteRow(index) {
@@ -849,25 +904,8 @@
         }
 
         function syncData() {
-            const nama = document.getElementById('inNama').value || "-";
-            const lokasi = document.getElementById('inLokasi').value || "-";
-            const ulp = document.getElementById('inULP').value || "-";
-            const tgl = "Malang, " + (document.getElementById('inTanggal').value || "");
-            const asman = document.getElementById('inAsman').value || "";
-            const tl = document.getElementById('inTL').value || "";
-
-            document.getElementById('outNamaRincian').textContent = "A.N. " + nama;
-            document.getElementById('outTanggal2').textContent = tgl;
-            document.getElementById('outAsman2').textContent = asman;
-            document.getElementById('outTL2').textContent = tl;
-
-            const imgA = document.getElementById('outTTDAsmanImg2');
-            const imgT = document.getElementById('outTTDTLImg2');
-            if (ttdAsmanData) { imgA.src = ttdAsmanData; imgA.classList.remove('hidden'); } else { imgA.classList.add('hidden'); }
-            if (ttdTLData) { imgT.src = ttdTLData; imgT.classList.remove('hidden'); } else { imgT.classList.add('hidden'); }
-
             saveToLocalStorage();
-            renderRekapPages();
+            renderAllTables();
         }
 
         function calculateTotal() {
