@@ -27,6 +27,12 @@
             background-image: none !important;
         }
 
+        /* Stylize input date icon for dark mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
         /* DOKUMEN CETAK PRESISI A4 PAS */
         .print-page {
             width: 210mm;
@@ -234,8 +240,8 @@
                     <input type="text" id="inULP" value="MALANG KOTA" oninput="syncData()" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-sky-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-slate-300 mb-1">Tanggal Dokumen</label>
-                    <input type="text" id="inTanggal" value="" oninput="syncData()" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-sky-500 focus:outline-none transition">
+                    <label class="block text-[11px] font-medium text-slate-300 mb-1">Tanggal Dokumen (Pilih Kalender)</label>
+                    <input type="date" id="inTanggal" onchange="syncData()" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-sky-500 focus:outline-none transition cursor-pointer">
                 </div>
                 <div>
                     <label class="block text-[11px] font-medium text-slate-300 mb-1">Assistant Manager Perencanaan</label>
@@ -275,7 +281,7 @@
                     <select id="selectMaterial" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white w-full sm:w-80 focus:border-sky-500 focus:outline-none cursor-pointer truncate">
                     </select>
                     <button onclick="addItemFromSelect()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-sky-500/20 active:scale-95 shrink-0">
-                        + Tambahkan
+                        + Auto Pilih
                     </button>
                 </div>
             </div>
@@ -308,6 +314,18 @@
         let isPrintMode = false;
         let ttdAsmanData = "";
         let ttdTLData = "";
+
+        // Function Helper Format Tanggal Indonesia
+        function getFormattedIndonesianDate(dateString) {
+            if (!dateString) return "";
+            const dateObj = new Date(dateString);
+            if (isNaN(dateObj.getTime())) return dateString;
+            return dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
 
         function previewTTD(event, targetImgId) {
             const file = event.target.files[0];
@@ -386,12 +404,12 @@
 
         function setTodayDate() {
             const today = new Date();
-            const formattedDate = today.toLocaleDateString('id-ID', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-            document.getElementById('inTanggal').value = formattedDate;
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            // Set ke input type date format YYYY-MM-DD
+            document.getElementById('inTanggal').value = `${yyyy}-${mm}-${dd}`;
             saveToLocalStorage();
         }
 
@@ -514,7 +532,11 @@
             const nama = document.getElementById('inNama').value || "-";
             const lokasi = document.getElementById('inLokasi').value || "-";
             const ulp = document.getElementById('inULP').value || "MALANG KOTA";
-            const tgl = "Malang, " + (document.getElementById('inTanggal').value || "");
+            
+            const rawTanggal = document.getElementById('inTanggal').value;
+            const tglFormatted = getFormattedIndonesianDate(rawTanggal);
+            const tgl = "Malang, " + (tglFormatted || "");
+            
             const asman = document.getElementById('inAsman').value || "";
             const tl = document.getElementById('inTL').value || "";
 
@@ -689,13 +711,12 @@
             `;
         }
 
-        /* ------------------- 2. RENDER DINAMIS RINCIAN PEKERJAAN (MULTI-HALAMAN) ------------------- */
+        /* ------------------- 2. RENDER DINAMIS RINCIAN PEKERJAAN ------------------- */
         function renderRincianPages() {
             const container = document.getElementById('rincianPagesContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            // Susun struktur baris berdasar Kategori (termasuk Baris Sub-Header Kategori)
             let formattedRows = [];
             const kategoriList = ['SUTM', 'SKUTM', 'GTT', 'SUTR'];
             let rowNo = 1;
@@ -739,7 +760,11 @@
 
         function createRincianPageHTML(pageRows, isLastPage) {
             const nama = document.getElementById('inNama').value || "-";
-            const tgl = "Malang, " + (document.getElementById('inTanggal').value || "");
+            
+            const rawTanggal = document.getElementById('inTanggal').value;
+            const tglFormatted = getFormattedIndonesianDate(rawTanggal);
+            const tgl = "Malang, " + (tglFormatted || "");
+
             const asman = document.getElementById('inAsman').value || "";
             const tl = document.getElementById('inTL').value || "";
 
