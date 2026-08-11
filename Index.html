@@ -101,7 +101,6 @@
             border-collapse: collapse;
         }
 
-        /* Padding disesuaikan agar tinggi sel pas memenuhi ruang kertas */
         .pln-table th, .pln-table td {
             border: 1px solid #000000 !important;
             padding: 4px 3px;
@@ -175,7 +174,7 @@
                             <h1 class="text-sm sm:text-base font-bold text-white tracking-tight">
                                 RAB Generator
                             </h1>
-                            <span class="text-[9px] font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full">v3.0 Modern</span>
+                            <span class="text-[9px] font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full">v3.5 Pro</span>
                         </div>
                         <p class="text-[10px] sm:text-xs text-slate-400 font-medium">PT. PLN (Persero) UID Jatim - UP3 Malang</p>
                     </div>
@@ -201,51 +200,6 @@
             </div>
         </div>
     </header>
-
-    <div id="panduanModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden text-slate-100 ring-1 ring-white/10">
-            <div class="px-5 py-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <span class="p-2 bg-amber-500/10 text-amber-400 rounded-xl text-base border border-amber-500/20">📖</span>
-                    <div>
-                        <h2 class="text-xs sm:text-sm font-bold text-white tracking-wide">Panduan Penggunaan</h2>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Tata cara operasional pengisian RAB & Rincian PB/PD</p>
-                    </div>
-                </div>
-                <button onclick="togglePanduanModal(false)" class="text-slate-400 hover:text-white font-bold text-sm w-8 h-8 rounded-xl hover:bg-slate-800 flex items-center justify-center transition">✕</button>
-            </div>
-            
-            <div class="p-5 overflow-y-auto space-y-4 text-xs leading-relaxed text-slate-300">
-                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
-                    <h3 class="font-bold text-sky-400 uppercase tracking-wider text-[10px] mb-1">1. Gambaran Umum</h3>
-                    <p class="text-slate-300">Aplikasi Generator RAB PLN ini digunakan untuk menyusun Rekapitulasi Rencana Anggaran Biaya & Rincian Pekerjaan PB/PD secara instan sesuai standar format cetak A4 resmi PLN.</p>
-                </div>
-
-                <div class="space-y-2.5">
-                    <h3 class="font-bold text-sky-400 uppercase tracking-wider text-[10px] mb-2">2. Langkah Pengisian</h3>
-                    <div class="flex items-start gap-3 bg-slate-950/40 p-3.5 rounded-2xl border border-slate-800/80">
-                        <span class="bg-sky-500 text-slate-950 font-extrabold w-5 h-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
-                        <div>
-                            <h4 class="font-semibold text-white text-[11px]">Lengkapi Informasi Dokumen</h4>
-                            <p class="text-slate-400 text-[11px]">Isi Nama Pemohon, Lokasi Pekerjaan, ULP, Tanggal, dan Pejabat Penandatangan di panel kontrol utama.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 bg-slate-950/40 p-3.5 rounded-2xl border border-slate-800/80">
-                        <span class="bg-sky-500 text-slate-950 font-extrabold w-5 h-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
-                        <div>
-                            <h4 class="font-semibold text-white text-[11px]">Tambah Material / Pekerjaan</h4>
-                            <p class="text-slate-400 text-[11px]">• Pilih dari katalog standar lalu klik <strong>+ Auto Pilih</strong>.<br>• Atau klik <strong>✏️ Tambah Baris Manual</strong> untuk mengetik uraian kustom.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-5 py-3.5 bg-slate-950 border-t border-slate-800 flex justify-end">
-                <button onclick="togglePanduanModal(false)" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-slate-700">Tutup Panduan</button>
-            </div>
-        </div>
-    </div>
 
     <main class="max-w-6xl mx-auto my-6 px-3 sm:px-4">
 
@@ -293,6 +247,17 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 border-t border-slate-800/60">
+                <div>
+                    <label class="block text-[11px] font-medium text-amber-400 mb-1">✍️ TTD Asman Perencanaan (.PNG Transparan)</label>
+                    <input type="file" id="imgAsmanTTD" accept="image/png, image/jpeg" onchange="previewTTD(event, 'outTTDAsmanImg')" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-400 file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-slate-800 file:text-amber-400 hover:file:bg-slate-700">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-amber-400 mb-1">✍️ TTD Team Leader Perencanaan (.PNG Transparan)</label>
+                    <input type="file" id="imgTLTTD" accept="image/png, image/jpeg" onchange="previewTTD(event, 'outTTDTLImg')" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-400 file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-slate-800 file:text-amber-400 hover:file:bg-slate-700">
+                </div>
+            </div>
+
             <hr class="border-slate-800/80">
 
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
@@ -310,7 +275,7 @@
                     <select id="selectMaterial" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white w-full sm:w-80 focus:border-sky-500 focus:outline-none cursor-pointer truncate">
                     </select>
                     <button onclick="addItemFromSelect()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-sky-500/20 active:scale-95 shrink-0">
-                        + Auto Pilih
+                        + Tambahkan
                     </button>
                 </div>
             </div>
@@ -364,14 +329,19 @@
                     </div>
 
                     <div class="flex justify-between items-end text-center text-[10px] pt-1 text-black">
-                        <div class="w-48">
-                            <div class="mb-0.5 invisible">&nbsp;</div>
-                            <p class="mb-16 font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
+                        <div class="w-48 relative">
+                            <div id="outTTDAsmanImgContainer" class="h-16 flex items-center justify-center">
+                                <img id="outTTDAsmanImg2" src="" class="max-h-16 hidden object-contain">
+                            </div>
+                            <p class="font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
                             <p id="outAsman2" class="font-bold underline">BAYU KRISTANTO</p>
                         </div>
-                        <div class="w-48">
+                        <div class="w-48 relative">
                             <p id="outTanggal2" class="mb-0.5">Malang, -</p>
-                            <p class="mb-16 font-semibold">TEAM LEADER PERENCANAAN</p>
+                            <div id="outTTDTLImgContainer" class="h-16 flex items-center justify-center">
+                                <img id="outTTDTLImg2" src="" class="max-h-16 hidden object-contain">
+                            </div>
+                            <p class="font-semibold">TEAM LEADER PERENCANAAN</p>
                             <p id="outTL2" class="font-bold underline">ARDY NURFIANTO</p>
                         </div>
                     </div>
@@ -393,8 +363,38 @@
 
         let activeItems = [];
         let isPrintMode = false;
+        let ttdAsmanData = "";
+        let ttdTLData = "";
 
-        // FUNGSI LOCALSTORAGE
+        function previewTTD(event, targetImgId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Img = e.target.result;
+                    if (targetImgId === 'outTTDAsmanImg') {
+                        ttdAsmanData = base64Img;
+                    } else {
+                        ttdTLData = base64Img;
+                    }
+                    saveToLocalStorage();
+                    renderAllTables();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function initDropdown() {
+            const select = document.getElementById('selectMaterial');
+            select.innerHTML = '';
+            masterKatalog.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = `[${item.kode}] ${item.uraian}`;
+                select.appendChild(opt);
+            });
+        }
+
         function saveToLocalStorage() {
             localStorage.setItem('pln_active_items', JSON.stringify(activeItems));
             
@@ -405,7 +405,9 @@
                 tanggal: document.getElementById('inTanggal').value,
                 asman: document.getElementById('inAsman').value,
                 tl: document.getElementById('inTL').value,
-                ppn: document.getElementById('selectPPN').value
+                ppn: document.getElementById('selectPPN').value,
+                ttdAsman: ttdAsmanData,
+                ttdTL: ttdTLData
             };
             localStorage.setItem('pln_form_data', JSON.stringify(formData));
         }
@@ -431,8 +433,10 @@
                     document.getElementById('inAsman').value = formData.asman || 'BAYU KRISTANTO';
                     document.getElementById('inTL').value = formData.tl || 'ARDY NURFIANTO';
                     if (formData.ppn) document.getElementById('selectPPN').value = formData.ppn;
+                    ttdAsmanData = formData.ttdAsman || "";
+                    ttdTLData = formData.ttdTL || "";
                 } catch (e) {
-                    // Biarkan default jika error
+                    // Biarkan default
                 }
             }
         }
@@ -448,12 +452,6 @@
             saveToLocalStorage();
         }
 
-        function togglePanduanModal(show) {
-            const modal = document.getElementById('panduanModal');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
         function loadKatalogData() {
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 google.script.run.withSuccessHandler(function(data) {
@@ -465,17 +463,6 @@
             } else {
                 initDropdown();
             }
-        }
-
-        function initDropdown() {
-            const select = document.getElementById('selectMaterial');
-            select.innerHTML = '';
-            masterKatalog.forEach((item, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = `[${item.kode}] ${item.uraian}`;
-                select.appendChild(opt);
-            });
         }
 
         function addManualRow() {
@@ -493,10 +480,10 @@
 
         function addItemFromSelect() {
             const selectIdx = document.getElementById('selectMaterial').value;
+            if (selectIdx === null || selectIdx === undefined || selectIdx === "") return;
             const katVal = document.getElementById('selectKategori').value;
             const item = masterKatalog[selectIdx];
 
-            // 1. Baris Material
             activeItems.push({
                 kategori: katVal,
                 kode: item.kode,
@@ -506,7 +493,6 @@
                 harga: item.hMat
             });
 
-            // 2. Baris Jasa Pemasangan
             if (item.hJasa > 0) {
                 activeItems.push({
                     kategori: katVal,
@@ -560,16 +546,14 @@
                 return;
             }
 
-            // PERHITUNGAN DINAMIS: Halaman biasa 28 baris (tanpa TTD/Total), Halaman terakhir 24 baris (dengan TTD/Total)
             const normalPageLimit = 28;
-            const lastPageLimit = 24;
+            const lastPageLimit = 22;
 
             let remainingItems = [...activeItems];
             let startIndex = 0;
 
             while (remainingItems.length > 0) {
                 let currentLimit = (remainingItems.length <= lastPageLimit) ? lastPageLimit : normalPageLimit;
-                
                 let pageItems = remainingItems.splice(0, currentLimit);
                 let isLastPage = (remainingItems.length === 0);
 
@@ -644,7 +628,15 @@
             let signatureHTML = '';
 
             if (isLastPage) {
+                const subKat = getSubtotalPerKategori();
+                
                 footerHTML = `
+                    <div class="mb-2 text-[9px] grid grid-cols-4 gap-1 text-black font-semibold border border-black p-1 bg-slate-50">
+                        <div>SUTM: <span class="font-bold">${formatRupiah(subKat.SUTM)}</span></div>
+                        <div>SKUTM: <span class="font-bold">${formatRupiah(subKat.SKUTM)}</span></div>
+                        <div>GTT: <span class="font-bold">${formatRupiah(subKat.GTT)}</span></div>
+                        <div>SUTR: <span class="font-bold">${formatRupiah(subKat.SUTR)}</span></div>
+                    </div>
                     <div class="flex justify-between items-start text-[10px] font-bold mb-2 text-black">
                         <div class="w-1/2 p-1.5 border border-black rounded bg-slate-50">
                             <span class="block text-[8px] text-slate-500 uppercase">TERBILANG JUMLAH TOTAL:</span>
@@ -667,16 +659,20 @@
                     </div>
                 `;
 
+                const asmanImg = ttdAsmanData ? `<img src="${ttdAsmanData}" class="max-h-16 object-contain">` : '';
+                const tlImg = ttdTLData ? `<img src="${ttdTLData}" class="max-h-16 object-contain">` : '';
+
                 signatureHTML = `
                     <div class="flex justify-between items-end text-center text-[10px] pt-1 text-black">
-                        <div class="w-48">
-                            <div class="mb-0.5 invisible">&nbsp;</div>
-                            <p class="mb-16 font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
+                        <div class="w-48 relative">
+                            <div class="h-16 flex items-center justify-center">${asmanImg}</div>
+                            <p class="font-semibold">ASSISTANT MANAGER PERENCANAAN</p>
                             <p class="font-bold underline">${asman}</p>
                         </div>
-                        <div class="w-48">
+                        <div class="w-48 relative">
                             <p class="mb-0.5">${tgl}</p>
-                            <p class="mb-16 font-semibold">TEAM LEADER PERENCANAAN</p>
+                            <div class="h-16 flex items-center justify-center">${tlImg}</div>
+                            <p class="font-semibold">TEAM LEADER PERENCANAAN</p>
                             <p class="font-bold underline">${tl}</p>
                         </div>
                     </div>
@@ -749,6 +745,17 @@
             `;
         }
 
+        function getSubtotalPerKategori() {
+            let res = { SUTM: 0, SKUTM: 0, GTT: 0, SUTR: 0 };
+            activeItems.forEach(item => {
+                let kat = item.kategori || 'SKUTM';
+                if (res[kat] !== undefined) {
+                    res[kat] += (item.vol || 0) * (item.harga || 0);
+                }
+            });
+            return res;
+        }
+
         function renderRincianTable() {
             const tbody = document.getElementById('rincianTableBody');
             tbody.innerHTML = '';
@@ -819,22 +826,24 @@
             }, 100);
         }
 
-        // FUNGSI RESET TOTAL DOKUMEN & FIELD INPUT CONTROL
         function resetToBlank() {
             activeItems = [];
+            ttdAsmanData = "";
+            ttdTLData = "";
+            
             localStorage.removeItem('pln_active_items');
             localStorage.removeItem('pln_form_data');
             
-            // Reset/Mengosongkan semua field kontrol di panel input
             document.getElementById('inNama').value = "";
             document.getElementById('inLokasi').value = "";
             document.getElementById('inULP').value = "MALANG KOTA";
             document.getElementById('inAsman').value = "BAYU KRISTANTO";
             document.getElementById('inTL').value = "ARDY NURFIANTO";
             document.getElementById('selectPPN').value = "0.11";
+            document.getElementById('imgAsmanTTD').value = "";
+            document.getElementById('imgTLTTD').value = "";
             
             setTodayDate();
-            
             syncData();
             renderAllTables();
         }
@@ -851,6 +860,11 @@
             document.getElementById('outTanggal2').textContent = tgl;
             document.getElementById('outAsman2').textContent = asman;
             document.getElementById('outTL2').textContent = tl;
+
+            const imgA = document.getElementById('outTTDAsmanImg2');
+            const imgT = document.getElementById('outTTDTLImg2');
+            if (ttdAsmanData) { imgA.src = ttdAsmanData; imgA.classList.remove('hidden'); } else { imgA.classList.add('hidden'); }
+            if (ttdTLData) { imgT.src = ttdTLData; imgT.classList.remove('hidden'); } else { imgT.classList.add('hidden'); }
 
             saveToLocalStorage();
             renderRekapPages();
