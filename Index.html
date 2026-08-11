@@ -27,7 +27,6 @@
             background-image: none !important;
         }
 
-        /* Stylize input date icon for dark mode */
         input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(1);
             cursor: pointer;
@@ -207,6 +206,51 @@
         </div>
     </header>
 
+    <div id="panduanModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden text-slate-100 ring-1 ring-white/10">
+            <div class="px-5 py-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-amber-500/10 text-amber-400 rounded-xl text-base border border-amber-500/20">📖</span>
+                    <div>
+                        <h2 class="text-xs sm:text-sm font-bold text-white tracking-wide">Panduan Penggunaan</h2>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Tata cara operasional pengisian RAB & Rincian PB/PD</p>
+                    </div>
+                </div>
+                <button onclick="togglePanduanModal(false)" class="text-slate-400 hover:text-white font-bold text-sm w-8 h-8 rounded-xl hover:bg-slate-800 flex items-center justify-center transition">✕</button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-4 text-xs leading-relaxed text-slate-300">
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+                    <h3 class="font-bold text-sky-400 uppercase tracking-wider text-[10px] mb-1">1. Gambaran Umum</h3>
+                    <p class="text-slate-300">Aplikasi Generator RAB PLN ini digunakan untuk menyusun Rekapitulasi Rencana Anggaran Biaya & Rincian Pekerjaan PB/PD secara instan sesuai standar format cetak A4 resmi PLN.</p>
+                </div>
+
+                <div class="space-y-2.5">
+                    <h3 class="font-bold text-sky-400 uppercase tracking-wider text-[10px] mb-2">2. Langkah Pengisian</h3>
+                    <div class="flex items-start gap-3 bg-slate-950/40 p-3.5 rounded-2xl border border-slate-800/80">
+                        <span class="bg-sky-500 text-slate-950 font-extrabold w-5 h-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+                        <div>
+                            <h4 class="font-semibold text-white text-[11px]">Lengkapi Informasi Dokumen</h4>
+                            <p class="text-slate-400 text-[11px]">Isi Nama Pemohon, Lokasi Pekerjaan, ULP, Tanggal, dan Pejabat Penandatangan di panel kontrol utama.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 bg-slate-950/40 p-3.5 rounded-2xl border border-slate-800/80">
+                        <span class="bg-sky-500 text-slate-950 font-extrabold w-5 h-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+                        <div>
+                            <h4 class="font-semibold text-white text-[11px]">Tambah Material / Pekerjaan</h4>
+                            <p class="text-slate-400 text-[11px]">• Pilih dari katalog standar lalu klik <strong>+ Auto Pilih</strong>.<br>• Atau klik <strong>✏️ Tambah Baris Manual</strong> untuk mengetik uraian kustom.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-3.5 bg-slate-950 border-t border-slate-800 flex justify-end">
+                <button onclick="togglePanduanModal(false)" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-slate-700">Tutup Panduan</button>
+            </div>
+        </div>
+    </div>
+
     <main class="max-w-6xl mx-auto my-6 px-3 sm:px-4">
 
         <section class="no-print bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 rounded-3xl border border-slate-800/80 mb-6 shadow-xl space-y-5">
@@ -281,7 +325,7 @@
                     <select id="selectMaterial" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white w-full sm:w-80 focus:border-sky-500 focus:outline-none cursor-pointer truncate">
                     </select>
                     <button onclick="addItemFromSelect()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-sky-500/20 active:scale-95 shrink-0">
-                        + Tambahkan
+                        + Auto Pilih
                     </button>
                 </div>
             </div>
@@ -315,7 +359,13 @@
         let ttdAsmanData = "";
         let ttdTLData = "";
 
-        // Function Helper Format Tanggal Indonesia
+        function togglePanduanModal(show) {
+            const modal = document.getElementById('panduanModal');
+            if (!modal) return;
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
         function getFormattedIndonesianDate(dateString) {
             if (!dateString) return "";
             const dateObj = new Date(dateString);
@@ -408,7 +458,6 @@
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
             
-            // Set ke input type date format YYYY-MM-DD
             document.getElementById('inTanggal').value = `${yyyy}-${mm}-${dd}`;
             saveToLocalStorage();
         }
@@ -542,7 +591,7 @@
 
             let rowsHTML = '';
             if (pageItems.length === 0) {
-                rowsHTML = `<tr><td colspan="9" class="text-center italic py-4 text-slate-400 font-medium bg-slate-50">✨ Belum ada data. Klik "+ Tambah Baris Manual" atau "+ Tambahkan".</td></tr>`;
+                rowsHTML = `<tr><td colspan="9" class="text-center italic py-4 text-slate-400 font-medium bg-slate-50">✨ Belum ada data. Klik "+ Tambah Baris Manual" atau "+ Auto Pilih".</td></tr>`;
             } else {
                 pageItems.forEach((item, localIdx) => {
                     const idx = startIndex + localIdx;
